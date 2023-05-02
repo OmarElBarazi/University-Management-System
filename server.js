@@ -1,13 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 require("dotenv").config();
 
 const mongoString = process.env.DATABASE_URL;
 
-mongoose.connect(mongoString);
+mongoose.connect(mongoString, {
+  useNewUrlParser: true,
+});
 const database = mongoose.connection;
-
-//Now, we have to throw a success or an error message depending on whether our database connection is successful or fails.
 
 database.on("error", (error) => {
   console.log(error);
