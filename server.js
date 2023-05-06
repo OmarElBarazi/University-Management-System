@@ -1,5 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+var cors = require("cors");
+
+//Require Routes
+const userRoutes = require("./src/routes/userRoutes");
 
 require("dotenv").config();
 
@@ -20,7 +25,12 @@ database.once("connected", () => {
 
 const app = express();
 
+app.use(cors);
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+//USE ROUTES IN SERVER
+app.use("/user", userRoutes);
 
 app.listen(3000, () => {
   console.log(`Server Started at ${3000}`);

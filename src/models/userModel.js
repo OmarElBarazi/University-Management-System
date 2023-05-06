@@ -1,9 +1,5 @@
 const mongoose = require("mongoose");
-const {
-  generateStudentId,
-  hashPassword,
-} = require("../pre-functions/userPreFunctions");
-
+const userPreFunctions = require("../pre-functions/userPreFunctions");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -54,8 +50,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("save", await hashPassword);
-userSchema.pre("save", await generateStudentId);
+userSchema.pre("save", userPreFunctions.hashPassword);
+userSchema.pre("save", userPreFunctions.generateStudentId);
 
 const User = mongoose.model("User", userSchema);
 

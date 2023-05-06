@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 
 //Generate Student Id for new students
-module.exports = generateStudentId = async (next) => {
+exports.generateStudentId = async (next) => {
   if (this.role !== "student" || this.studentId) {
     return next();
   }
@@ -27,7 +27,7 @@ module.exports = generateStudentId = async (next) => {
 };
 
 //Hash Password
-module.exports = hashPassword = async (next) => {
+exports.hashPassword = async (next) => {
   if (!this.isModified("password")) {
     return next();
   }
