@@ -17,12 +17,23 @@ const courseSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  instructor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  instructor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   available: {
     type: Boolean,
+    required: true,
+  },
+  day: {
+    type: String,
+    required: true,
+  },
+  time: {
+    type: String,
     required: true,
   },
 });
 
 const Course = mongoose.model("Course", courseSchema);
-module.exports = Course; 
+module.exports = Course;

@@ -6,6 +6,7 @@ var cors = require("cors");
 //Require Routes
 const userRoutes = require("./src/routes/userRoutes");
 const registerationRoutes = require("./src/routes/registerationRoutes");
+const courseRoutes = require("./src/routes/courseRoutes");
 
 require("dotenv").config();
 
@@ -33,6 +34,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //USE ROUTES IN SERVER
 app.use("/user", userRoutes);
 app.use("/registeration", registerationRoutes);
+app.use("/course", courseRoutes);
 
 app.listen(3000, () => {
   console.log(`Server Started at ${3000}`);
