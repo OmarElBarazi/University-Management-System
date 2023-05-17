@@ -16,7 +16,6 @@ const timetableSchema = new Schema({
       course: {
         type: Schema.Types.ObjectId,
         ref: "Course",
-        required: true,
       },
     },
   ],

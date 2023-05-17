@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const TimeTable = require("../models/timeTableModel");
 
 //Create Staff and student Users
 exports.createUser = async (req, res) => {
@@ -20,6 +21,13 @@ exports.createUser = async (req, res) => {
       newUser.advisor = advisorUser._id;
       await newUser.save();
       res.status(201).json({ user: newUser });
+
+      //Create Empty TimeTable for the Student
+      const timeTable = new TimeTable({
+        studentId: newUser._id,
+      });
+
+      await timeTable.save();
     } else {
       throw new Error("Invalid role");
     }
