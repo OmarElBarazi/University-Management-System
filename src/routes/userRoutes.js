@@ -21,16 +21,16 @@ router.get(
 );
 
 router.get(
-  "/staff",
+  "/student",
   authMiddlware.userAuth,
   authMiddlware.userCheckRole("admin"),
   userController.getStudents
 );
 
 router.get(
-  "/staff",
+  "/staff/student",
   authMiddlware.userAuth,
-  authMiddlware.userCheckRole(["admin", "staff"]),
+  authMiddlware.userCheckRole("staff"),
   userController.getStudentsByAdvisor
 );
 
