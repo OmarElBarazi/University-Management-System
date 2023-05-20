@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 //USER SignUp
-exports.userSignUp = async (req, res) => {
+const userSignUp = async (req, res) => {
   try {
     //GET the user from database with same name if any
     const validateUserName = async (name) => {
@@ -37,9 +37,13 @@ exports.userSignUp = async (req, res) => {
     //Create new User
     const newUser = new User({
       name: req.body.name,
+      surname: req.body.surname,
       email: req.body.email,
       role: req.body.role,
       password: req.body.password,
+      startDate: req.body.startDate,
+      year: req.body.year,
+      semester: req.body.semester,
     });
 
     await newUser.save();
@@ -54,7 +58,7 @@ exports.userSignUp = async (req, res) => {
 };
 
 //User Login
-exports.userLogin = async (req, res) => {
+const userLogin = async (req, res) => {
   let { email, password } = req.body;
 
   // First Check if the user exist in the database
@@ -75,18 +79,24 @@ exports.userLogin = async (req, res) => {
       {
         role: user.role,
         name: user.name,
+        surname: user.surname,
         email: user.email,
+        startDate: user.startDate,
+        year: user.year,
         _id: user._id,
-        permissions: user.permissions,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "3 days" }
+      { expiresIn: "30 days" }
     );
 
     let result = {
-      name: user.name,
       role: user.role,
+      name: user.name,
+      surname: user.surname,
       email: user.email,
+      startDate: user.startDate,
+      year: user.year,
+      _id: user._id,
       token: token,
     };
 
@@ -100,3 +110,5 @@ exports.userLogin = async (req, res) => {
     });
   }
 };
+
+module.exports = { userSignUp, userLogin };

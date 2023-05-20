@@ -4,12 +4,10 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   surname: {
     type: String,
     required: true,
-    unique: true,
   },
   password: {
     type: String,
@@ -29,6 +27,7 @@ const userSchema = new mongoose.Schema({
   studentId: {
     type: Number,
     unique: true,
+    sparse: true,
   },
   advisor: {
     type: mongoose.Schema.Types.ObjectId,

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const transcriptSchema = new mongoose.Schema({
   studentId: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
     unique: true,
@@ -19,7 +19,7 @@ const transcriptSchema = new mongoose.Schema({
   courses: [
     {
       course: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Course",
         required: true,
       },

@@ -16,11 +16,17 @@ exports.createUser = async (req, res) => {
       res.status(201).json({ user: newUser });
     } else if (newUser.role === "student") {
       // if role is student, search for advisor name and populate the advisor with the id of the matching user
-      const advisorUser = await User.findOne({ name: advisor });
+      const advisorUser = await User.findOne({ _id: advisor });
       if (!advisorUser) throw new Error("Advisor not found");
-      newUser.advisor = advisorUser._id;
-      await newUser.save();
-      res.status(201).json({ user: newUser });
+
+      const studentUser = new User({
+        ...userData,
+        role,
+        advisor,
+      });
+      await studentUser.save();
+
+      res.status(201).json({ user: studentUser });
 
       //Create Empty TimeTable for the Student
       const timeTable = new TimeTable({
@@ -40,7 +46,7 @@ exports.createUser = async (req, res) => {
 exports.getStaff = async (req, res) => {
   try {
     const staff = await User.find({ role: "staff" });
-    res.json(staff);
+    res.status(200).json({staff});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

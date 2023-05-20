@@ -3,7 +3,6 @@ const router = express.Router();
 
 const registerationController = require("../controllers/registerationControllers");
 
-//Routes for the users
 
 //POST
 router.post("/signup", registerationController.userSignUp);

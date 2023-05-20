@@ -28,7 +28,7 @@ router.get(
 );
 
 router.get(
-  "/staff/student",
+  "/student/:advisorId",
   authMiddlware.userAuth,
   authMiddlware.userCheckRole("staff"),
   userController.getStudentsByAdvisor
