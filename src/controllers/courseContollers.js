@@ -39,7 +39,7 @@ exports.updateCourse = async (req, res) => {
     if (updateObject.instructor) {
       course.instructor = updateObject.instructor;
     }
-    if (updateObject.available !== undefined) {
+    if (updateObject.available) {
       course.available = updateObject.available;
     }
     if (updateObject.day) {

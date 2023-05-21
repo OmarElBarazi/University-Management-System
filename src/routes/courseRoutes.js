@@ -29,7 +29,7 @@ router.get(
 
 //PATCH
 router.patch(
-  "/courses/:courseId",
+  "/:courseId",
   authMiddlware.userAuth,
   authMiddlware.userCheckRole("admin"),
   courseController.updateCourse
