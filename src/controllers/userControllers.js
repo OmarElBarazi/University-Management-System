@@ -30,7 +30,7 @@ exports.createUser = async (req, res) => {
 
       //Create Empty TimeTable for the Student
       const timeTable = new TimeTable({
-        studentId: newUser._id,
+        studentId: studentUser._id,
       });
 
       await timeTable.save();

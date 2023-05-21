@@ -4,18 +4,24 @@ exports.calculateGPA = async (courses) => {
 
   for (let i = 0; i < courses.length; i++) {
     const course = courses[i];
-    const { credits, grade } = course;
+    const {
+      course: { credits },
+      grade,
+    } = course; // Update to access credits from course object
 
     // Assign grade point values based on letter grades
     let gradePoints;
     switch (grade.toUpperCase()) {
       case "A":
+      case "A+":
         gradePoints = 4.0;
         break;
       case "B":
+      case "B+":
         gradePoints = 3.0;
         break;
       case "C":
+      case "C+":
         gradePoints = 2.0;
         break;
       case "D":
