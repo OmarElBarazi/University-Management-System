@@ -1,23 +1,41 @@
 const TimeTable = require("../models/timeTableModel");
 const Course = require("../models/courseModel");
 
+const desSecurity = require("../encryption/des");
+
 exports.getTimeTableByStudentId = async (req, res) => {
   try {
     const studentId = req.params.id;
 
-    // Find the timetable by studentId and populate the course information
-    const timetable = await TimeTable.findOne({ studentId })
-      .populate({
-        path: "schedule.course",
-        model: "Course",
-      })
-      .exec();
+    // Find the timetable by studentId
+    const timetable = await TimeTable.findOne({ studentId });
 
     if (!timetable) {
       return res.status(404).json({ message: "Timetable not found" });
     }
 
-    res.status(200).json(timetable);
+    const decryptedSchedule = [];
+
+    // Decrypt course data in the schedule and retrieve course information
+    for (const entry of timetable.schedule) {
+      const decryptedCourseId = desSecurity.decryptWithDES(entry.course);
+      const courseId = JSON.parse(decryptedCourseId);
+
+      // Retrieve course information using the decrypted course ID
+      const course = await Course.findById(courseId);
+
+      if (course) {
+        decryptedSchedule.push({ course: course });
+      }
+    }
+
+    const decryptedTimetable = {
+      studentId: timetable.studentId,
+      schedule: decryptedSchedule,
+      confirm: timetable.confirm,
+    };
+
+    res.status(200).json(decryptedTimetable);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -34,30 +52,49 @@ exports.updateSchedule = async (req, res) => {
       return res.status(404).json({ message: "Timetable not found" });
     }
 
+    let decryptedSchedule = [];
+    // Decrypt course data in the schedule
+    if (timetable.schedule.length > 0) {
+      decryptedSchedule = timetable.schedule.map((entry) => {
+        const decryptedCourse = desSecurity.decryptWithDES(entry.course);
+        return { course: JSON.parse(decryptedCourse) };
+      });
+    }
+
     // Remove courses from schedule
     if (coursesToRemove && coursesToRemove.length > 0) {
-      timetable.schedule = timetable.schedule.filter(
-        (entry) => !coursesToRemove.includes(entry.course.toString())
+      const updatedSchedule = decryptedSchedule.filter(
+        (entry) => !coursesToRemove.includes(entry.course)
       );
+
+      timetable.schedule = updatedSchedule.map((entry) => ({
+        course: desSecurity.encryptWithDES(JSON.stringify(entry.course)),
+      }));
     }
 
     // Add courses to schedule
     if (coursesToAdd && coursesToAdd.length > 0) {
-      coursesToAdd.forEach((courseId) => {
-        const courseExists = timetable.schedule.some(
-          (entry) => entry.course.toString() === courseId
+      for (const courseId of coursesToAdd) {
+        const courseExists = decryptedSchedule.some(
+          (entry) => entry.course === courseId
         );
 
         if (!courseExists) {
-          timetable.schedule.push({ course: courseId });
+          const course = await Course.findById(courseId);
+
+          if (course) {
+            timetable.schedule.push({
+              course: desSecurity.encryptWithDES(JSON.stringify(course._id)),
+            });
+          }
         }
-      });
+      }
     }
 
     // Save the updated timetable
     const updatedTimeTable = await timetable.save();
 
-    res.status(200).json(updatedTimeTable);
+    res.status(200).json({ schedule: updatedTimeTable.schedule });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

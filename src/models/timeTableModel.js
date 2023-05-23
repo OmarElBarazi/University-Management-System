@@ -14,8 +14,8 @@ const timetableSchema = new Schema({
   schedule: [
     {
       course: {
-        type: Schema.Types.ObjectId,
-        ref: "Course",
+        type: String,
+        required: true,
       },
     },
   ],
@@ -25,7 +25,6 @@ const timetableSchema = new Schema({
     default: false,
   },
 });
-
 const TimeTable = mongoose.model("TimeTable", timetableSchema);
 
 module.exports = TimeTable;
