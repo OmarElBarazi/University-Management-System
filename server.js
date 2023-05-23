@@ -38,7 +38,7 @@ mongoose
     //USE ROUTES IN SERVER FOR KEY GENERATION
     app.use("/key", keyGenerationRoutes);
 
-    app.listen(3000, () => {
-      console.log(`Server Started at ${"localhost:3000"}`);
+    app.listen(5000, () => {
+      console.log(`Server Started at ${"localhost:5000"}`);
     });
   });
