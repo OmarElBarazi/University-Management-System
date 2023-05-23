@@ -28,8 +28,8 @@ const transcriptSchema = new mongoose.Schema({
       },
     },
   ],
-  gpa: { type: Number, required: true },
-  cgpa: { type: Number, required: true },
+  gpa: { type: String, required: true },
+  cgpa: { type: String, required: true },
 });
 
 const Transcript = mongoose.model("Transcript", transcriptSchema);

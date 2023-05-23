@@ -2,22 +2,21 @@ const express = require("express");
 const router = express.Router();
 const authMiddlware = require("../middlware/authMiddlware");
 
-transcriptControllers = require("../controllers/transcriptControllers");
+const desKeyGenerator = require("../encryption/des");
+const rsaKeyGenerator = require("../encryption/rsa");
 
-//POST
 router.post(
-  "/",
+  "/des",
   authMiddlware.userAuth,
   authMiddlware.userCheckRole("staff"),
-  transcriptControllers.createTranscript
+  desKeyGenerator.generateAndSaveDESKey
 );
 
-//GET
-router.get(
-  "/:studentId",
+router.post(
+  "/rsa",
   authMiddlware.userAuth,
-  authMiddlware.userCheckRole(["admin", "staff", "student"]),
-  transcriptControllers.getTranscripts
+  authMiddlware.userCheckRole("staff"),
+  rsaKeyGenerator.generateAndSaveRSAKeyPair
 );
 
 module.exports = router;

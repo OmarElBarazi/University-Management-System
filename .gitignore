@@ -3,6 +3,8 @@ node_modules/
 
 # Ignore .env files
 .env
+des.env
+rsa.env
 
 # Ignore logs
 logs/

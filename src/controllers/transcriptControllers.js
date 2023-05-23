@@ -1,6 +1,8 @@
 const Transcript = require("../models/transcriptModel");
 const Course = require("../models/courseModel");
 
+const rsaSecurity = require("../encryption/rsa");
+
 const gpaCalculater = require("../utils/gpaCalculater");
 
 exports.createTranscript = async (req, res) => {
@@ -22,7 +24,7 @@ exports.createTranscript = async (req, res) => {
 
     transcript.gpa = await gpaCalculater.calculateGPA(transcript.courses);
 
-    //Implement Logic for calculating CGPA
+    // Implement Logic for calculating CGPA
     const oldTranscripts = await Transcript.find({
       studentId: studentId,
       year: { $lte: year },
@@ -47,11 +49,60 @@ exports.createTranscript = async (req, res) => {
       transcript.cgpa = await gpaCalculater.calculateGPA(coursesTaken);
     }
 
+    // Apply RSA encryption to GPA and CGPA
+    const encryptedGPA = rsaSecurity.encryptWithPublicKey(
+      transcript.gpa.toString()
+    );
+    const encryptedCGPA = rsaSecurity.encryptWithPublicKey(
+      transcript.cgpa.toString()
+    );
+
+    transcript.gpa = encryptedGPA;
+    transcript.cgpa = encryptedCGPA;
+
     // Save the transcript to the database
     await transcript.save();
 
     res.status(201).json({ transcript });
   } catch (error) {
     res.status(500).json({ message: "Failed to create transcript", error });
+  }
+};
+
+// Controller to find all transcripts by student ID and decrypt the GPA fields
+exports.getTranscripts = async (req, res) => {
+  const studentId = req.params.studentId;
+
+  try {
+    // Find all transcripts by student ID
+    const transcripts = await Transcript.find({ studentId }).populate({
+      path: "courses.course",
+      model: "Course",
+    });
+
+    // Decrypt the GPA fields using RSA private key
+    const decryptedTranscripts = transcripts.map((transcript) => {
+      const decryptedGpa = rsaSecurity.decryptWithPrivateKey(transcript.gpa);
+      const decryptedCgpa = rsaSecurity.decryptWithPrivateKey(transcript.cgpa);
+
+      // Create a new transcript object with decrypted GPA and CGPA
+      const decryptedTranscript = {
+        _id: transcript._id,
+        studentId: transcript.studentId,
+        year: transcript.year,
+        semester: transcript.semester,
+        courses: transcript.courses,
+        gpa: decryptedGpa,
+        cgpa: decryptedCgpa,
+      };
+
+      return decryptedTranscript;
+    });
+
+    // Send the decrypted transcripts as a JSON response
+    res.json(decryptedTranscripts);
+  } catch (error) {
+    console.error("Error finding transcripts:", error);
+    res.status(500).json({ error: "Failed to retrieve transcripts" });
   }
 };
