@@ -46,7 +46,7 @@ exports.createUser = async (req, res) => {
 exports.getStaff = async (req, res) => {
   try {
     const staff = await User.find({ role: "staff" });
-    res.status(200).json({staff});
+    res.status(200).json({ staff });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -56,7 +56,7 @@ exports.getStaff = async (req, res) => {
 exports.getStudents = async (req, res) => {
   try {
     const students = await User.find({ role: "student" });
-    res.json(students);
+    res.status.json({ students });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
