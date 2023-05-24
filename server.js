@@ -5,6 +5,9 @@ var cors = require("cors");
 
 require("dotenv").config();
 
+//PORT DECLARATION
+const PORT = process.env.PORT || 5000;
+
 //REQUIRE ROUTES FOR MODELS
 const userRoutes = require("./src/routes/userRoutes");
 const registerationRoutes = require("./src/routes/registerationRoutes");
@@ -38,7 +41,7 @@ mongoose
     //USE ROUTES IN SERVER FOR KEY GENERATION
     app.use("/key", keyGenerationRoutes);
 
-    app.listen(5000, () => {
-      console.log(`Server Started at ${"localhost:5000"}`);
+    app.listen(PORT, () => {
+      console.log(`Server Started on port ${PORT}`);
     });
   });
