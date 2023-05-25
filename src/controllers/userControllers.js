@@ -55,7 +55,10 @@ exports.getStaff = async (req, res) => {
 // Get all users with role 'student'
 exports.getStudents = async (req, res) => {
   try {
-    const students = await User.find({ role: "student" });
+    const students = await User.find({ role: "student" }).populate({
+      path: "students.advisor",
+      model: "User",
+    });;
     res.status(200).json({ students });
   } catch (err) {
     res.status(500).json({ message: err.message });
