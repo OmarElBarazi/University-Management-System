@@ -56,7 +56,7 @@ exports.getStaff = async (req, res) => {
 exports.getStudents = async (req, res) => {
   try {
     const students = await User.find({ role: "student" }).populate({
-      path: "students.advisor",
+      path: "advisor",
       model: "User",
     });;
     res.status(200).json({ students });
