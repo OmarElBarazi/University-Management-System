@@ -8,7 +8,8 @@ exports.createCourse = async (req, res) => {
       credits: req.body.credits,
       instructor: req.body.instructor,
       day: req.body.day,
-      time: req.body.time,
+      start: req.body.start,
+      end: req.body.end,
       available: req.body.available,
     });
 
@@ -45,8 +46,11 @@ exports.updateCourse = async (req, res) => {
     if (updateObject.day) {
       course.day = updateObject.day;
     }
-    if (updateObject.time) {
-      course.time = updateObject.time;
+    if (updateObject.start) {
+      course.start = updateObject.start;
+    }
+    if (updateObject.end) {
+      course.end = updateObject.end;
     }
 
     const updatedCourse = await course.save();
