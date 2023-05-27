@@ -94,7 +94,7 @@ exports.updateSchedule = async (req, res) => {
     // Save the updated timetable
     const updatedTimeTable = await timetable.save();
 
-    res.status(200).json({ schedule: updatedTimeTable.schedule });
+    res.status(200).json({ updatedTimeTable });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -114,7 +114,7 @@ exports.updateConfirmStatus = async (req, res) => {
     timetable.confirm = confirm;
     const updatedTimetable = await timetable.save();
 
-    res.status(200).json(updatedTimetable);
+    res.status(200).json({updatedTimetable});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

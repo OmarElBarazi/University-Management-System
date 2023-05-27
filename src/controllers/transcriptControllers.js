@@ -100,9 +100,35 @@ exports.getTranscripts = async (req, res) => {
     });
 
     // Send the decrypted transcripts as a JSON response
-    res.json(decryptedTranscripts);
+    res.status(200).json(decryptedTranscripts);
   } catch (error) {
     console.error("Error finding transcripts:", error);
     res.status(500).json({ error: "Failed to retrieve transcripts" });
+  }
+};
+
+//Get Courses Taken By student with grades
+exports.getTakenCoursesForStudent = async (req, res) => {
+  const studentId = req.params.id;
+  try {
+    const transcripts = await Transcript.find({ studentId }).populate({
+      path: "courses.course",
+      model: "Course",
+    });
+
+    const courses = [];
+    for (const transcript of transcripts) {
+      for (const course of transcript.courses) {
+        const takenCourse = {
+          ...course.course.toObject(),
+          grade: course.grade,
+        };
+        courses.push(takenCourse);
+      }
+    }
+    res.status(200).json({ courses });
+  } catch (error) {
+    console.error("Error finding Courses:", error);
+    res.status(500).json({ error: "Failed to retrieve taken courses" });
   }
 };

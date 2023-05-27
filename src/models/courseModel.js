@@ -23,7 +23,6 @@ const courseSchema = new mongoose.Schema({
   },
   available: {
     type: Boolean,
-    required: true,
   },
   day: {
     type: String,

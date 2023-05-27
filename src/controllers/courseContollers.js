@@ -13,8 +13,8 @@ exports.createCourse = async (req, res) => {
       available: req.body.available,
     });
 
-    const savedCourse = await newCourse.save();
-    res.status(201).json(savedCourse);
+    const course = await newCourse.save();
+    res.status(201).json({ course });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -55,7 +55,7 @@ exports.updateCourse = async (req, res) => {
 
     const updatedCourse = await course.save();
 
-    res.status(200).json(updatedCourse);
+    res.status(200).json({ updatedCourse });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -70,10 +70,23 @@ exports.getAvailableCourses = async (req, res) => {
   }
 };
 
+exports.getCoursesAdvisor = async (req, res) => {
+  try {
+    const advisorId = req.params.id;
+    const courses = await Course.find({ instructor: advisorId });
+    res.status(200).json({ courses });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 exports.getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find();
-    res.status(200).json(courses);
+    const courses = await Course.find().populate({
+      path: "instructor",
+      model: "User",
+    });
+    res.status(200).json({ courses });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

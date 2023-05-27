@@ -27,6 +27,13 @@ router.get(
   courseController.getAvailableCourses
 );
 
+router.get(
+  "/advisor/:id",
+  authMiddlware.userAuth,
+  authMiddlware.userCheckRole(["admin", "staff"]),
+  courseController.getCoursesAdvisor
+);
+
 //PATCH
 router.patch(
   "/:courseId",

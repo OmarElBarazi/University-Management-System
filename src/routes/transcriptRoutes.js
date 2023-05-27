@@ -19,5 +19,9 @@ router.get(
   authMiddlware.userCheckRole(["admin", "staff", "student"]),
   transcriptControllers.getTranscripts
 );
+router.get(
+  "/taken/courses/:id",
+  transcriptControllers.getTakenCoursesForStudent
+);
 
 module.exports = router;

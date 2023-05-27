@@ -10,10 +10,11 @@ exports.createUser = async (req, res) => {
       role: role.toLowerCase(), // make sure role is lowercase
     });
 
+    console.log(newUser)
     if (newUser.role === "staff") {
       // if role is staff, create new user with role staff and take req.body rest for his information
       await newUser.save();
-      res.status(201).json({ user: newUser });
+      res.status(200).json({ user: newUser });
     } else if (newUser.role === "student") {
       // if role is student, search for advisor name and populate the advisor with the id of the matching user
       const advisorUser = await User.findOne({ _id: advisor });
@@ -26,7 +27,7 @@ exports.createUser = async (req, res) => {
       });
       await studentUser.save();
 
-      res.status(201).json({ user: studentUser });
+      res.status(200).json({ user: studentUser });
 
       //Create Empty TimeTable for the Student
       const timeTable = new TimeTable({
