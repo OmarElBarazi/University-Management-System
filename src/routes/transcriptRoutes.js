@@ -21,6 +21,8 @@ router.get(
 );
 router.get(
   "/taken/courses/:id",
+  authMiddlware.userAuth,
+  authMiddlware.userCheckRole(["admin", "staff", "student"]),
   transcriptControllers.getTakenCoursesForStudent
 );
 
