@@ -8,7 +8,7 @@ transcriptControllers = require("../controllers/transcriptControllers");
 router.post(
   "/",
   authMiddlware.userAuth,
-  authMiddlware.userCheckRole("staff"),
+  authMiddlware.userCheckRole(["staff", "admin"]),
   transcriptControllers.createTranscript
 );
 

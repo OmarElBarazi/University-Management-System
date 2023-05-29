@@ -10,7 +10,7 @@ exports.createUser = async (req, res) => {
       role: role.toLowerCase(), // make sure role is lowercase
     });
 
-    console.log(newUser)
+    console.log(newUser);
     if (newUser.role === "staff") {
       // if role is staff, create new user with role staff and take req.body rest for his information
       await newUser.save();
@@ -74,7 +74,10 @@ exports.getStudentsByAdvisor = async (req, res) => {
       return res.status(404).json({ message: "Advisor not found" });
     }
 
-    const students = await User.find({ advisor: advisor._id });
+    const students = await User.find({ advisor: advisor._id }).populate({
+      path: "advisor",
+      model: "User",
+    });
     res.json(students);
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -16,7 +16,7 @@ router.post(
 router.get(
   "/",
   authMiddlware.userAuth,
-  authMiddlware.userCheckRole("admin"),
+  authMiddlware.userCheckRole(["admin", "staff", "student"]),
   courseController.getAllCourses
 );
 

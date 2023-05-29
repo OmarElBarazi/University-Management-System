@@ -16,7 +16,7 @@ router.get(
 router.patch(
   "/schedule/:id",
   authMiddlware.userAuth,
-  authMiddlware.userCheckRole(["student", "staff"]),
+  authMiddlware.userCheckRole(["student", "staff", "admin"]),
   timeTableController.updateSchedule
 );
 

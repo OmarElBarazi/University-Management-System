@@ -73,7 +73,10 @@ exports.getAvailableCourses = async (req, res) => {
 exports.getCoursesAdvisor = async (req, res) => {
   try {
     const advisorId = req.params.id;
-    const courses = await Course.find({ instructor: advisorId });
+    const courses = await Course.find({ instructor: advisorId }).populate({
+      path: "instructor",
+      model: "User",
+    });
     res.status(200).json({ courses });
   } catch (error) {
     res.status(400).json({ message: error.message });
