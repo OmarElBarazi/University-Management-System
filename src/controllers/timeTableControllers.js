@@ -30,6 +30,7 @@ exports.getTimeTableByStudentId = async (req, res) => {
     }
 
     const decryptedTimetable = {
+      _id: timetable._id,
       studentId: timetable.studentId,
       schedule: decryptedSchedule,
       confirm: timetable.confirm,
@@ -102,7 +103,7 @@ exports.updateSchedule = async (req, res) => {
 
 exports.updateConfirmStatus = async (req, res) => {
   try {
-    const timetableId = req.params.timetableId;
+    const timetableId = req.params.id;
     const { confirm } = req.body;
 
     const timetable = await TimeTable.findById(timetableId);

@@ -23,7 +23,7 @@ router.patch(
 router.patch(
   "/confirm/:id",
   authMiddlware.userAuth,
-  authMiddlware.userCheckRole(["staff"]),
+  authMiddlware.userCheckRole(["staff", "admin"]),
   timeTableController.updateConfirmStatus
 );
 
