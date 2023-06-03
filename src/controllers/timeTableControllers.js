@@ -22,7 +22,10 @@ exports.getTimeTableByStudentId = async (req, res) => {
       const courseId = JSON.parse(decryptedCourseId);
 
       // Retrieve course information using the decrypted course ID
-      const course = await Course.findById(courseId);
+      const course = await Course.findById(courseId).populate({
+        path: "instructor",
+        model: "User",
+      });
 
       if (course) {
         decryptedSchedule.push(course);

@@ -18,8 +18,7 @@ const transcriptSchema = new mongoose.Schema({
   courses: [
     {
       course: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Course",
+        type: String,
         required: true,
       },
       grade: {
