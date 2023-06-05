@@ -9,7 +9,7 @@ router.post(
   "/",
   authMiddlware.userAuth,
   authMiddlware.userCheckRole("admin"),
-  userController.createUser
+  userController.createUserAccount
 );
 
 // GET
@@ -39,7 +39,7 @@ router.patch(
   "/:id",
   authMiddlware.userAuth,
   authMiddlware.userCheckRole(["admin", "staff"]),
-  userController.updateUser
+  userController.updateUserAccount
 );
 
 //DELETE
@@ -47,7 +47,7 @@ router.delete(
   "/:id",
   authMiddlware.userAuth,
   authMiddlware.userCheckRole("admin"),
-  userController.updateUser
+  userController.deleteUserAccount
 );
 
 module.exports = router;

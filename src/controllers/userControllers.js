@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const TimeTable = require("../models/timeTableModel");
 
 //Create Staff and student Users
-exports.createUser = async (req, res) => {
+exports.createUserAccount = async (req, res) => {
   try {
     const { role, advisor, ...userData } = req.body; // extract role and advisor from req.body
     const newUser = new User({
@@ -84,23 +84,22 @@ exports.getStudentsByAdvisor = async (req, res) => {
   }
 };
 
-//Update Staff or Student information
-exports.updateUser = async (req, res) => {
+exports.updateUserAccount = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json({ user });
+    Object.assign(user, req.body); // Update only the fields present in req.body
+    const updatedUser = await user.save();
+    res.json({ user: updatedUser });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
 //Delete Staff or Student Users
-exports.deleteUser = async (req, res) => {
+exports.deleteUserAccount = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
